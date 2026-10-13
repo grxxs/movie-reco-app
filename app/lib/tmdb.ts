@@ -1,18 +1,15 @@
 import { TMDBresponse } from "./types";
-
+import { env } from "./env";
 export async function fetchSearchResults(props: { search: string }) {
   const query = encodeURIComponent(props.search);
   const options = {
     method: "GET",
     headers: {
       accept: "application/json",
-      Authorization: `Bearer ${process.env.TMDB_BEARER}`,
+      Authorization: `Bearer ${env.TMDB_BEARER}`,
     },
   };
 
-  if (!process.env.TMDB_BEARER) {
-    throw new Error(`Brak TMDB_BEARER w zmiennych środowiskowych`);
-  }
   const response = await fetch(
     `https://api.themoviedb.org/3/search/multi?query=${query}&language=pl-PL`,
     {
