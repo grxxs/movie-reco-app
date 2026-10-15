@@ -60,9 +60,11 @@ Po zmianie plików `.env*` zrestartuj serwer deweloperski.
 
 ## Zmienne środowiskowe
 
-| Zmienna       | Opis                                                                                     |
-| ------------- | ---------------------------------------------------------------------------------------- |
-| `TMDB_BEARER` | Token dostępu do API TMDB (API Read Access Token). Używany wyłącznie po stronie serwera. |
+| Zmienna        | Opis                                                                                     |
+| -------------- | ---------------------------------------------------------------------------------------- |
+| `TMDB_BEARER`  | Token dostępu do API TMDB (API Read Access Token). Używany wyłącznie po stronie serwera. |
+| `DATABASE_URL` | Adres dostępu do bazy danych poprzez pooler transakcyjny.                                |
+| `DIRECT_URL`   | Adres dostępu do bazy danych poprzez pooler sesyjny. Służy do migracji.                  |
 
 Aplikacja sprawdza obecność wymaganych zmiennych przy starcie i kończy się błędem z nazwą brakującej zmiennej. Dotyczy to także `npm run build`, więc przy wdrożeniu zmienne muszą być ustawione przed zbudowaniem aplikacji.
 

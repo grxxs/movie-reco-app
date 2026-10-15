@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum WatchStatus {
+  PLANNED
+  WATCHED
+  WATCHING
+}
+
+enum MediaType {
+  MOVIE
+  TV
+}
+
+model User {
+  id   String @id @db.Uuid
+  role Role @default(USER)
+  createdAt DateTime @default(now()) @map("created_at")
+  listItems ListItem[]
+  @@map("users")
+}
+
+model Production {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tmdbId Int @map("tmdb_id")
+  mediaType MediaType @map("media_type")
+  title String
+  releaseDate DateTime? @map("release_date")
+  overview String?
+  posterPath String? @map("poster_path")
+  syncedAt DateTime @default(now()) @map("synced_at")
+  listItems ListItem[]
+  productionKeywords ProductionKeyword[]
+  productionGenres ProductionGenre[]
+
+  @@unique([tmdbId, mediaType])
+  @@map("productions")
+}
+
+model ListItem {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId String @db.Uuid
+  productionId String @db.Uuid
+  status WatchStatus @default(PLANNED)
+  rating Int?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  production Production @relation(fields: [productionId], references: [id], onDelete: Restrict)
+
+  @@unique([userId, productionId])
+  @@map("list_items")
+}
+
+model Keyword {
+  id Int @id
+  name String
+  productionKeyword ProductionKeyword[]
+
+  @@map("keywords")
+}
+
+model ProductionKeyword {
+  productionId String @db.Uuid
+  keywordId Int
+  production Production @relation(fields: [productionId], references: [id], onDelete: Cascade)
+  keyword Keyword @relation(fields: [keywordId], references: [id], onDelete: Cascade)
+
+  @@id([productionId, keywordId])
+  @@map("production_keywords")
+
+}
+
+model Genre {
+  id Int @id
+  name String
+  productionGenre ProductionGenre[]
+
+  @@map("genres")
+}
+
+model ProductionGenre {
+  productionId String @db.Uuid
+  genreId Int 
+  production Production @relation(fields: [productionId], references: [id], onDelete: Cascade)
+  genre Genre @relation(fields: [genreId], references: [id], onDelete: Cascade)
+
+  @@id([productionId, genreId])
+  @@map("production_genres")
+
+}
+
+
