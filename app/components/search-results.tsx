@@ -1,5 +1,5 @@
 import { fetchSearchResults } from "../lib/tmdb";
-import { TMDBResponseElement } from "../lib/types";
+import { TMDBResponseElement } from "../lib/definitions";
 
 export default async function SearchResults(props: { query: string }) {
   let results: TMDBResponseElement[];

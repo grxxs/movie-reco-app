@@ -1,4 +1,4 @@
-import { TMDBresponse } from "./types";
+import { TMDBresponse } from "./definitions";
 import { env } from "./env";
 export async function fetchSearchResults(props: { search: string }) {
   const query = encodeURIComponent(props.search);
