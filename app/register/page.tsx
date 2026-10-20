@@ -61,7 +61,7 @@ export default function Register() {
             name="password"
             className="border border-gray-300 py-1 px-2 rounded text-sm"
             placeholder="Hasło"
-            autoComplete="current-password"
+            autoComplete="new-password"
           />
           <ul className="list-disc self-start px-2.5">
             {state?.errors?.password &&
@@ -80,7 +80,7 @@ export default function Register() {
           type="submit"
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm w-1/2"
         >
-          {pending ? "Logowane..." : "Zaloguj"}
+          {pending ? "Rejestracja..." : "Zarejestruj"}
         </button>
       </form>
     </div>

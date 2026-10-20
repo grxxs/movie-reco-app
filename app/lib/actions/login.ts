@@ -23,8 +23,8 @@ export async function login(
   }
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({
-    email: email,
-    password: password,
+    email: validatedFields.data.email,
+    password: validatedFields.data.password,
   });
 
   if (!error) {
@@ -35,6 +35,7 @@ export async function login(
       email: email,
     };
   } else {
+    console.error(error);
     return {
       message: "Wystąpił nieoczekiwany błąd",
       email: email,

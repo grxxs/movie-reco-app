@@ -26,11 +26,13 @@ export async function register(
     };
   }
 
-  const existing = await prisma.user.findUnique({ where: { username } });
+  const existing = await prisma.user.findUnique({
+    where: { username: validatedFields.data.username },
+  });
 
   if (existing) {
     return {
-      message: "Podana nazwa użytkownika jest już zajęta",
+      errors: { username: ["Podana nazwa użytkownika jest już zajęta"] },
       email: email,
       username: username,
     };
@@ -38,10 +40,10 @@ export async function register(
 
   const supabase = await createClient();
   const { error } = await supabase.auth.signUp({
-    email: email,
-    password: password,
+    email: validatedFields.data.email,
+    password: validatedFields.data.password,
     options: {
-      data: { username },
+      data: { username: validatedFields.data.username },
     },
   });
 
@@ -49,7 +51,7 @@ export async function register(
     redirect("/");
   } else if (error.code === "user_already_exists") {
     return {
-      message: "Podany adres email jest już w użyciu",
+      errors: { email: ["Podany adres email jest już w użyciu"] },
       email: email,
       username: username,
     };

@@ -52,7 +52,7 @@ export const RegisterFormSchema = z.object({
     }),
   password: z
     .string()
-    .min(8, { error: "Hasło musi mieć conajmniej 8 znaków" })
+    .min(8, { error: "Hasło musi mieć co najmniej 8 znaków" })
     .regex(/[a-zA-Z]/, { error: "Hasło musi zawierać literę" })
     .regex(/[0-9]/, { error: "Hasło musi zawierać cyfrę" })
     .regex(/[^a-zA-Z0-9]/, {
