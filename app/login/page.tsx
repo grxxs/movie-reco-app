@@ -5,6 +5,7 @@ import { useActionState } from "react";
 
 export default function Login() {
   const [state, action, pending] = useActionState(login, undefined);
+  console.log(state?.errors?.password);
   return (
     <div className="p-2.5 flex justify-center items-center h-full">
       <form

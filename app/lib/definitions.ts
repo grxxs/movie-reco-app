@@ -18,7 +18,10 @@ export interface TMDBresponse {
 }
 
 export const LogInFormSchema = z.object({
-  email: z.email({ error: "Wprowadź prawidłowy adres email" }).trim(),
+  email: z
+    .string()
+    .trim()
+    .pipe(z.email({ error: "Wprowadź prawidłowy adres email" })),
   password: z.string().min(1, { error: "Wprowadź hasło." }),
 });
 
@@ -33,19 +36,39 @@ export type LogInFormState =
     }
   | undefined;
 
-export const SignupFormSchema = z.object({
-  name: z
+export const RegisterFormSchema = z.object({
+  email: z
     .string()
-    .min(2, { error: "Name must be at least 2 characters long." })
-    .trim(),
-  email: z.email({ error: "Please enter a valid email." }).trim(),
+    .trim()
+    .pipe(z.email({ error: "Wprowadź prawidłowy adres email" })),
+  username: z
+    .string()
+    .trim()
+    .min(3, { error: "Nazwa użytkownika musi mieć od 3 do 20 znaków" })
+    .max(20, { error: "Nazwa użytkownika musi mieć od 3 do 20 znaków" })
+    .regex(/^[a-z0-9_]+$/, {
+      error:
+        "Nazwa użytkownika może zawierać tylko małe litery, cyfry i znak _",
+    }),
   password: z
     .string()
-    .min(8, { error: "Be at least 8 characters long" })
-    .regex(/[a-zA-Z]/, { error: "Contain at least one letter." })
-    .regex(/[0-9]/, { error: "Contain at least one number." })
+    .min(8, { error: "Hasło musi mieć conajmniej 8 znaków" })
+    .regex(/[a-zA-Z]/, { error: "Hasło musi zawierać literę" })
+    .regex(/[0-9]/, { error: "Hasło musi zawierać cyfrę" })
     .regex(/[^a-zA-Z0-9]/, {
-      error: "Contain at least one special character.",
-    })
-    .trim(),
+      error: "Hasło musi zawierać znak specjalny",
+    }),
 });
+
+export type RegisterFormState =
+  | {
+      errors?: {
+        email?: string[];
+        username?: string[];
+        password?: string[];
+      };
+      email?: string;
+      username?: string;
+      message?: string;
+    }
+  | undefined;
