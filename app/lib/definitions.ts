@@ -25,16 +25,14 @@ export const LogInFormSchema = z.object({
   password: z.string().min(1, { error: "Wprowadź hasło." }),
 });
 
-export type LogInFormState =
-  | {
-      errors?: {
-        email?: string[];
-        password?: string[];
-      };
-      email?: string;
-      message?: string;
-    }
-  | undefined;
+export type LogInFormState = {
+  errors?: {
+    email?: string[];
+    password?: string[];
+  };
+  email?: string;
+  message?: string | null;
+};
 
 export const RegisterFormSchema = z.object({
   email: z
@@ -60,15 +58,13 @@ export const RegisterFormSchema = z.object({
     }),
 });
 
-export type RegisterFormState =
-  | {
-      errors?: {
-        email?: string[];
-        username?: string[];
-        password?: string[];
-      };
-      email?: string;
-      username?: string;
-      message?: string;
-    }
-  | undefined;
+export type RegisterFormState = {
+  errors?: {
+    email?: string[];
+    username?: string[];
+    password?: string[];
+  };
+  email?: string;
+  username?: string;
+  message?: string | null;
+};
