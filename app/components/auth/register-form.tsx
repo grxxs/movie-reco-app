@@ -4,6 +4,7 @@ import { register } from "@/app/lib/actions/register";
 import { useActionState } from "react";
 import { RegisterFormState } from "@/app/lib/definitions";
 import Button from "../button";
+import Link from "next/link";
 
 export default function RegisterForm() {
   const initialState: RegisterFormState = { message: null, errors: {} };
@@ -82,6 +83,12 @@ export default function RegisterForm() {
         <Button type="submit" className="w-1/2" aria-disabled={pending}>
           {pending ? "Rejestracja..." : "Zarejestruj"}
         </Button>
+        <p className="text-xs">
+          Masz już konto?{" "}
+          <Link href="/login" className="text-blue-500">
+            Zaloguj się
+          </Link>
+        </p>
       </form>
     </div>
   );

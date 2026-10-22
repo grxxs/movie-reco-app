@@ -2,6 +2,7 @@ import { login } from "@/app/lib/actions/login";
 import { useActionState } from "react";
 import { LogInFormState } from "@/app/lib/definitions";
 import Button from "@/app/components/button";
+import Link from "next/link";
 
 export default function LoginForm() {
   const initialState: LogInFormState = { message: null, errors: {} };
@@ -52,6 +53,12 @@ export default function LoginForm() {
         <Button type="submit" className="w-1/2" aria-disabled={pending}>
           {pending ? "Logowanie..." : "Zaloguj"}
         </Button>
+        <p className="text-xs">
+          Nie masz konta?{" "}
+          <Link href="/register" className="text-blue-500">
+            Zarejestruj się
+          </Link>
+        </p>
       </form>
     </div>
   );
