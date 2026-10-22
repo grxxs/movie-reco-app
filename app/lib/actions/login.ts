@@ -3,7 +3,7 @@
 import { createClient } from "../supabase/server";
 import { LogInFormSchema, LogInFormState } from "../definitions";
 import { redirect } from "next/navigation";
-import { currentUser } from "@/app/components/database/get-current-user";
+import { currentUser } from "@/app/database/get-current-user";
 
 export async function login(
   state: LogInFormState,
