@@ -3,7 +3,7 @@
 import { createClient } from "../supabase/server";
 import { LogInFormSchema, LogInFormState } from "../definitions";
 import { redirect } from "next/navigation";
-import { currentUser } from "@/app/database/get-current-user";
+import { currentUser } from "@/app/lib/database/get-current-user";
 
 export async function login(
   state: LogInFormState,
@@ -30,7 +30,7 @@ export async function login(
 
   if (!error) {
     const data = await currentUser();
-    console.log(data);
+    console.error(data);
     redirect("/");
   } else if (error.code === "invalid_credentials") {
     return {

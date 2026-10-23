@@ -11,6 +11,7 @@ export interface TMDBResponseElement {
   popularity: number;
   vote_average: number;
   vote_count: number;
+  poster_path: string | null;
 }
 
 export interface TMDBresponse {

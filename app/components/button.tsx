@@ -1,4 +1,5 @@
-const base = "bg-blue-500 hover:bg-blue-700 text-white font-bold rounded";
+const base =
+  "bg-blue-500 hover:bg-blue-700 text-white font-bold rounded disabled:opacity-50 disabled:cursor-not-allowed";
 
 const sizes = {
   sm: "py-1 px-3 text-xs",

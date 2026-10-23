@@ -10,7 +10,7 @@ export async function logout() {
   if (!error) {
     redirect("/login");
   } else {
-    console.log(error.message);
+    console.error(error.message);
     redirect("/");
   }
 }

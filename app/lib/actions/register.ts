@@ -56,6 +56,7 @@ export async function register(
       username: username,
     };
   } else {
+    console.error(error.message);
     return {
       message: "Wystąpił nieoczekiwany błąd",
       email: email,

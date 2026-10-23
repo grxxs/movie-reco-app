@@ -1,6 +1,6 @@
 import { logout } from "@/app/lib/actions/logout";
 import Button from "./button";
-import { currentUser } from "../database/get-current-user";
+import { currentUser } from "../lib/database/get-current-user";
 import Link from "next/link";
 import LinkButton from "./linkbutton";
 

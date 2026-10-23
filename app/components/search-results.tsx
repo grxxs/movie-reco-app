@@ -1,5 +1,6 @@
 import { fetchSearchResults } from "../lib/tmdb";
 import { TMDBResponseElement } from "../lib/definitions";
+import SearchResult from "../components/search-results-element";
 
 export default async function SearchResults(props: { query: string }) {
   let results: TMDBResponseElement[];
@@ -12,16 +13,10 @@ export default async function SearchResults(props: { query: string }) {
     return <div>Wystąpił nieoczekiwany błąd podczas pobierania danych</div>;
   }
   return (
-    <div>
-      <p>Wyniki wyszukiwania:</p>
+    <div className="flex flex-col align-center items-center divide-y-2 divide-gray-200 divide-solid">
+      <p className="text-xl font-bold py-2">Wyniki wyszukiwania:</p>
       {results.map((el) => (
-        <div key={el.id}>
-          <hr />
-          <p>{el.title || el.name}</p>
-          <p>{el.overview}</p>
-          <p>{el.popularity}</p>
-          <hr />
-        </div>
+        <SearchResult item={el} key={el.id} />
       ))}
     </div>
   );

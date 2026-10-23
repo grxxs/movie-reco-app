@@ -1,3 +1,5 @@
+"use client";
+
 import { login } from "@/app/lib/actions/login";
 import { useActionState } from "react";
 import { LogInFormState } from "@/app/lib/definitions";
@@ -50,7 +52,7 @@ export default function LoginForm() {
           <p className="text-xs text-red-500">{state.message}</p>
         )}
 
-        <Button type="submit" className="w-1/2" aria-disabled={pending}>
+        <Button type="submit" className="w-1/2" disabled={pending}>
           {pending ? "Logowanie..." : "Zaloguj"}
         </Button>
         <p className="text-xs">

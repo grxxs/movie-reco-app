@@ -80,7 +80,7 @@ export default function RegisterForm() {
           )}
         </div>
 
-        <Button type="submit" className="w-1/2" aria-disabled={pending}>
+        <Button type="submit" className="w-1/2" disabled={pending}>
           {pending ? "Rejestracja..." : "Zarejestruj"}
         </Button>
         <p className="text-xs">
