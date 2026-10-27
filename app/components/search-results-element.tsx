@@ -1,25 +1,11 @@
 import type { TMDBResponseElement } from "../lib/definitions";
+import { getType, getYear } from "../lib/format/fromat-helper";
 import Image from "next/image";
 import Link from "next/link";
 
-function getType(name: "movie" | "tv" | "person") {
-  switch (name) {
-    case "movie":
-      return "Film";
-    case "tv":
-      return "Serial";
-    default:
-      return "";
-  }
-}
-
-function getYear(date?: string, air?: string) {
-  return (date || air || "").slice(0, 4);
-}
-
 export default function SearchResult({ item }: { item: TMDBResponseElement }) {
-  console.log(item);
   const year = getYear(item.release_date, item.first_air_date);
+  console.log(item);
   return (
     <Link
       href={`/title/${item.media_type}/${item.id}`}

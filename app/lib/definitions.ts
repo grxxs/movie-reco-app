@@ -1,5 +1,12 @@
 import * as z from "zod";
 
+export interface Genre {
+  id: number;
+  name: string;
+}
+
+export type MediaTypeEnum = "movie" | "tv";
+
 export interface TMDBResponseElement {
   id: number;
   media_type: "movie" | "tv" | "person";
@@ -17,6 +24,39 @@ export interface TMDBResponseElement {
 export interface TMDBresponse {
   results: TMDBResponseElement[];
 }
+
+export interface MovieDetails {
+  id: number;
+  title: string;
+  release_date: string;
+  overview: string;
+  poster_path: string | null;
+  genres: Genre[];
+}
+
+export interface TvDetails {
+  id: number;
+  name: string;
+  first_air_date: string;
+  overview: string;
+  poster_path: string | null;
+  genres: Genre[];
+}
+
+export interface TitleDetails {
+  id: number;
+  title: string;
+  mediaType: MediaTypeEnum;
+  releaseDate: string;
+  overview: string;
+  posterPath: string | null;
+  genres: Genre[];
+}
+
+export const URLParamsSchema = z.object({
+  id: z.coerce.number(),
+  type: z.enum(["movie", "tv"]),
+});
 
 export const LogInFormSchema = z.object({
   email: z
