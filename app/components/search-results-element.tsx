@@ -5,7 +5,6 @@ import Link from "next/link";
 
 export default function SearchResult({ item }: { item: TMDBResponseElement }) {
   const year = getYear(item.release_date, item.first_air_date);
-  console.log(item);
   return (
     <Link
       href={`/title/${item.media_type}/${item.id}`}

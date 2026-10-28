@@ -1,7 +1,7 @@
 import { fetchTitleDetails } from "@/app/lib/tmdb";
 import { URLParamsSchema } from "@/app/lib/definitions";
 import { notFound } from "next/navigation";
-import { getType } from "@/app/lib/format/fromat-helper";
+import { SearchResultDetails } from "@/app/components/search-results-details";
 
 export default async function Title({
   params,
@@ -22,17 +22,9 @@ export default async function Title({
     type: validatedFields.data.type,
   });
 
-  console.log(details);
-
   if (!details) {
     notFound();
   }
 
-  return (
-    <div>
-      <div>{details.title}</div>
-      <p>{getType(details.mediaType)}</p>
-      <p>{details.overview}</p>
-    </div>
-  );
+  return <SearchResultDetails details={details} />;
 }

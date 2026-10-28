@@ -32,6 +32,7 @@ export interface MovieDetails {
   overview: string;
   poster_path: string | null;
   genres: Genre[];
+  backdrop_path: string | null;
 }
 
 export interface TvDetails {
@@ -41,6 +42,7 @@ export interface TvDetails {
   overview: string;
   poster_path: string | null;
   genres: Genre[];
+  backdrop_path: string | null;
 }
 
 export interface TitleDetails {
@@ -51,10 +53,11 @@ export interface TitleDetails {
   overview: string;
   posterPath: string | null;
   genres: Genre[];
+  backdropPath: string | null;
 }
 
 export const URLParamsSchema = z.object({
-  id: z.coerce.number(),
+  id: z.coerce.number().int().positive(),
   type: z.enum(["movie", "tv"]),
 });
 

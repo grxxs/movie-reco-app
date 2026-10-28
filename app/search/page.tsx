@@ -6,9 +6,5 @@ export default async function Search(props: {
   const resolvedSearchParams = await props.searchParams;
   const search = resolvedSearchParams?.search || "";
   const searchTrimmed = typeof search === "string" ? search.trim() : "";
-  return (
-    <div>
-      <SearchResults query={searchTrimmed} />
-    </div>
-  );
+  return <SearchResults query={searchTrimmed} />;
 }

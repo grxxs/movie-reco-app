@@ -52,6 +52,9 @@ export async function fetchTitleDetails({
       accept: "application/json",
       Authorization: `Bearer ${env.TMDB_BEARER}`,
     },
+    next: {
+      revalidate: 86400,
+    },
   };
 
   const response = await fetch(
@@ -83,6 +86,7 @@ export async function fetchTitleDetails({
         overview: movieDetails.overview,
         posterPath: movieDetails.poster_path,
         genres: movieDetails.genres,
+        backdropPath: movieDetails.backdrop_path,
       };
     case "tv":
       const tvDetails: TvDetails = await response.json();
@@ -94,6 +98,7 @@ export async function fetchTitleDetails({
         overview: tvDetails.overview,
         posterPath: tvDetails.poster_path,
         genres: tvDetails.genres,
+        backdropPath: tvDetails.backdrop_path,
       };
   }
 }
