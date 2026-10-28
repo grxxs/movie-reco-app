@@ -1,32 +1,29 @@
 import { fetchSearchResults } from "../lib/tmdb";
 import { TMDBResponseElement } from "../lib/definitions";
 import SearchResult from "../components/search-results-element";
-import LinkButton from "./linkbutton";
+import SearchMessage from "./search-message";
 
-export default async function SearchResults(props: { query: string }) {
+export default async function SearchResults({ query }: { query: string }) {
   let results: TMDBResponseElement[];
+  const trimmedQuery = query.trim();
+  if (trimmedQuery === "") {
+    return <SearchMessage message="Wpisz tytuł, żeby wyszukać" />;
+  }
   try {
     results = await fetchSearchResults({
-      search: props.query,
+      search: trimmedQuery,
     });
   } catch (error) {
-    console.error(`Błąd wyszukiwania`, { search: props.query }, error);
+    console.error(`Błąd wyszukiwania`, { search: trimmedQuery }, error);
     return (
-      <div className="flex flex-1 flex-col justify-center items-center -mt-40">
-        <p className="text-xl font-bold py-2">
-          Wystąpił nieoczekiwany błąd podczas pobierania danych
-        </p>
-        <LinkButton
-          href="/"
-          className="border-transparent bg-blue-500 hover:bg-blue-700 text-white"
-        >
-          Wróć do wyszukiwania
-        </LinkButton>
-      </div>
+      <SearchMessage message="Wystąpił nieoczekiwany błąd podczas pobierania danych" />
     );
   }
+  if (results.length === 0) {
+    return <SearchMessage message={`Brak wyników dla "${trimmedQuery}"`} />;
+  }
   return (
-    <div className="flex flex-col align-center items-center divide-y-2 divide-gray-200 divide-solid">
+    <div className="flex flex-1 flex-col items-center divide-y-2 divide-gray-200 divide-solid">
       <p className="text-xl font-bold py-2">Wyniki wyszukiwania:</p>
       {results.map((el) => (
         <SearchResult item={el} key={el.id} />
