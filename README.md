@@ -16,17 +16,18 @@ Większość serwisów z filmami i serialami nie oferuje przejrzystych, spersona
 
 Zrobione:
 
-- wyszukiwanie filmów i seriali po tytule (dane z TMDB, 10 najpopularniejszych wyników),
+- wyszukiwanie filmów i seriali po tytule (dane z TMDB, 10 najpopularniejszych wyników z plakatem, typem i rokiem; obsługa pustej frazy, braku wyników i błędu TMDB),
+- strona szczegółów tytułu (`/title/{movie|tv}/{id}`): tło, plakat, tytuł, typ, rok, gatunki i opis, z obsługą braku plakatu, tła i opisu,
+- obsługa błędów: strona "nie znaleziono" dla nieistniejących tytułów i niepoprawnych adresów oraz wspólna strona błędu dla awarii serwisu zewnętrznego,
 - stopka z wymaganą atrybucją TMDB,
 - walidacja zmiennych środowiskowych przy starcie,
 - baza danych (PostgreSQL na Supabase, ORM Prisma): schemat, migracje, włączone RLS,
 - konta użytkowników i autoryzacja (Supabase Auth, e-mail i hasło): rejestracja, logowanie, wylogowanie, odświeżanie sesji,
 - nagłówek zależny od stanu logowania,
 - wdrożenie na Vercelu.
+  Planowane:
 
-Planowane:
-
-- strona szczegółów tytułu,
+- dodawanie tytułów do listy i zapis produkcji w bazie,
 - biblioteka użytkownika: statusy, oceny w skali 1-5,
 - serwis rekomendacji w Pythonie (FastAPI),
 - zmiana i usuwanie konta,
@@ -38,42 +39,43 @@ Planowane:
 
 - Next.js (App Router), React, TypeScript
 - Tailwind CSS
-- Zod (walidacja formularzy)
+- Zod (walidacja formularzy i parametrów adresu)
 - Supabase: PostgreSQL i Supabase Auth
 - Prisma ORM 7
 - TMDB API jako źródło danych o filmach i serialach
-
-Planowo: Python + FastAPI (serwis rekomendacji).
+- react-icons (ikony)
+  Planowo: Python + FastAPI (serwis rekomendacji).
 
 ## Uruchomienie lokalne
 
 1. Skopiuj `.env.example` do `.env.local` i uzupełnij wartości (opis poniżej).
-
 2. Zainstaluj zależności:
 
-   ```bash
+```bash
    npm install
-   ```
+```
 
-   Po instalacji automatycznie uruchamia się `prisma generate` (skrypt `postinstall`), który wymaga ustawionych zmiennych `DATABASE_URL` i `DIRECT_URL`.
+Po instalacji automatycznie uruchamia się `prisma generate` (skrypt `postinstall`), który wymaga ustawionych zmiennych `DATABASE_URL` i `DIRECT_URL`.
 
 3. Zastosuj migracje bazy danych:
 
-   ```bash
+```bash
    npx prisma migrate deploy
-   ```
+```
 
 4. Uruchom serwer deweloperski:
 
-   ```bash
+```bash
    npm run dev
-   ```
+```
 
-   Aplikacja będzie dostępna pod adresem http://localhost:3000.
+Aplikacja będzie dostępna pod adresem http://localhost:3000.
 
-Po zmianie plików `.env*` zrestartuj serwer deweloperski.
+Po zmianie plików `.env*` lub `next.config.ts` zrestartuj serwer deweloperski.
 
 Podczas pracy nad schematem bazy używaj `npx prisma migrate dev --name <nazwa>`, a następnie ręcznie `npx prisma generate` (w Prismie 7 `migrate dev` nie generuje klienta).
+
+W trybie deweloperskim terminal wypisuje każde zapytanie `fetch` wykonane po stronie serwera (pełny adres, czas i stan cache), co pozwala sprawdzić, czy zapytanie do TMDB rzeczywiście zostało wysłane.
 
 ## Konfiguracja Supabase
 
@@ -97,6 +99,16 @@ Zmienne z prefiksem `NEXT_PUBLIC_` są wstawiane do kodu wysyłanego do przeglą
 
 Plików `.env*` (poza `.env.example`) nie dodajemy do repozytorium.
 
+## Dane z TMDB
+
+- Wszystkie zapytania do API TMDB wykonuje serwer (token nie trafia do przeglądarki), z językiem `pl-PL` i limitem czasu 5 s.
+- **Wyszukiwanie** odpytuje API na żywo (`search/multi`), bez zapamiętywania wyników. Pusta fraza nie wysyła zapytania.
+- **Szczegóły tytułu** pochodzą z `GET /movie/{id}` lub `GET /tv/{id}`. Odpowiedź jest mapowana na wspólny typ (`TitleDetails`), więc reszta aplikacji nie zależy od różnic między filmem a serialem (`title`/`name`, `release_date`/`first_air_date`).
+- Parametry adresu strony szczegółów są walidowane (Zod): typ to `movie` albo `tv`, identyfikator to dodatnia liczba całkowita. Niepoprawny adres nie wysyła zapytania do TMDB.
+- Odpowiedź 404 z TMDB oznacza stronę "nie znaleziono", a pozostałe błędy (sieć, limit czasu, 5xx) trafiają do strony błędu.
+- Szczegóły tytułu są przechowywane w pamięci podręcznej serwera Next.js przez 24 godziny (`revalidate`), co ogranicza liczbę zapytań do TMDB i mieści się w limicie przechowywania danych z warunków użycia API.
+- Plakaty i tła ładowane są z `image.tmdb.org` (host dopuszczony w `next.config.ts` w `images.remotePatterns`), w rozmiarach dobranych do wielkości wyświetlania. Gdy tytuł nie ma plakatu, wyświetlany jest obraz zastępczy.
+
 ## Uwierzytelnianie
 
 - Konta, hasła i sesje obsługuje Supabase Auth. Tokeny sesji są przechowywane w ciasteczkach przez pakiet `@supabase/ssr`, więc serwer Next.js widzi, kto jest zalogowany.
@@ -118,15 +130,21 @@ Plików `.env*` (poza `.env.example`) nie dodajemy do repozytorium.
 
 ```
 app/
-  components/   komponenty współdzielone (nagłówek, stopka, przyciski, formularze, wyniki wyszukiwania)
+  components/   komponenty współdzielone (nagłówek, stopka, przyciski, formularze,
+                wyniki wyszukiwania, widok szczegółów tytułu, komunikaty)
   lib/          logika pomocnicza: klient TMDB, klient Prisma, klienci Supabase (supabase/),
-                akcje serwerowe (actions/), schematy walidacji, zmienne środowiskowe
+                akcje serwerowe (actions/), formatowanie (format/), typy i schematy walidacji,
+                zmienne środowiskowe
   login/        strona logowania
   register/     strona rejestracji
   search/       strona wyszukiwania
+  title/[type]/[id]/   strona szczegółów tytułu i strona "nie znaleziono"
+  error.tsx     wspólna strona błędu
   layout.tsx    wspólny układ strony
   page.tsx      strona główna
 prisma/         schemat bazy i migracje
+public/         pliki statyczne (m.in. obraz zastępczy plakatu)
+next.config.ts  konfiguracja Next.js (dozwolone hosty obrazów, logowanie zapytań)
 prisma7.config.ts   konfiguracja Prisma CLI
 proxy.ts        odświeżanie sesji Supabase
 ```
@@ -136,3 +154,5 @@ proxy.ts        odświeżanie sesji Supabase
 This application uses TMDB and the TMDB APIs but is not endorsed, certified, or otherwise approved by TMDB.
 
 Aplikacja jest projektem niekomercyjnym i działa zgodnie z [warunkami użycia API TMDB](https://www.themoviedb.org/documentation/api/terms-of-use), w tym z limitem przechowywania danych TMDB (maksymalnie 6 miesięcy) i obowiązkiem atrybucji.
+
+Ikony: [Circum Icons](https://circumicons.com) (przez pakiet `react-icons`), licencja MPL-2.0.
