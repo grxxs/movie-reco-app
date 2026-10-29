@@ -1,8 +1,27 @@
 import { TitleDetails } from "../lib/definitions";
 import { getType, getYear } from "../lib/format/fromat-helper";
 import Image from "next/image";
+import AddToList from "./add-to-list";
 
-export function SearchResultDetails({ details }: { details: TitleDetails }) {
+export function SearchResultDetails({
+  details,
+  user,
+  onList,
+}: {
+  details: TitleDetails;
+  user: boolean;
+  onList: boolean;
+}) {
+  let status: "logged" | "added" | "guest" = "guest";
+
+  if (user && !onList) {
+    status = "logged";
+  } else if (user && onList) {
+    status = "added";
+  } else {
+    status = "guest";
+  }
+
   return (
     <div>
       {details.backdropPath !== null ? (
@@ -34,7 +53,7 @@ export function SearchResultDetails({ details }: { details: TitleDetails }) {
           height={400}
           className="z-10 shrink-0 self-start w-[266px] h-[400px] -mt-[170px] object-cover rounded-md shadow-xl/35"
         />
-        <div className="my-4 flex flex-col gap-1">
+        <div className="my-4 flex flex-col gap-1 min-w-[350px] flex-1">
           <p className="text-2xl">{details.title}</p>
           <p className="text-lg">
             {getType(details.mediaType)}
@@ -65,6 +84,7 @@ export function SearchResultDetails({ details }: { details: TitleDetails }) {
               <p className="text-lg opacity-50">Brak opisu do wyświetlenia</p>
             )}
           </div>
+          <AddToList status={status} details={details} />
         </div>
       </div>
     </div>

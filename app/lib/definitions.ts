@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export interface Genre {
+export interface GenreOrKeyword {
   id: number;
   name: string;
 }
@@ -31,8 +31,11 @@ export interface MovieDetails {
   release_date: string;
   overview: string;
   poster_path: string | null;
-  genres: Genre[];
+  genres: GenreOrKeyword[];
   backdrop_path: string | null;
+  keywords: {
+    keywords: GenreOrKeyword[];
+  };
 }
 
 export interface TvDetails {
@@ -41,8 +44,11 @@ export interface TvDetails {
   first_air_date: string;
   overview: string;
   poster_path: string | null;
-  genres: Genre[];
+  genres: GenreOrKeyword[];
   backdrop_path: string | null;
+  keywords: {
+    results: GenreOrKeyword[];
+  };
 }
 
 export interface TitleDetails {
@@ -52,8 +58,9 @@ export interface TitleDetails {
   releaseDate: string;
   overview: string;
   posterPath: string | null;
-  genres: Genre[];
+  genres: GenreOrKeyword[];
   backdropPath: string | null;
+  keywords: GenreOrKeyword[];
 }
 
 export const URLParamsSchema = z.object({
@@ -110,5 +117,13 @@ export type RegisterFormState = {
   };
   email?: string;
   username?: string;
+  message?: string | null;
+};
+
+export type AddTitleFormState = {
+  errors?: {
+    id?: number;
+    type?: MediaTypeEnum;
+  };
   message?: string | null;
 };

@@ -1,11 +1,11 @@
 import { logout } from "@/app/lib/actions/logout";
 import Button from "./button";
-import { currentUser } from "../lib/database/get-current-user";
+import { getCurrentUser } from "../lib/database/get-current-user";
 import Link from "next/link";
 import LinkButton from "./linkbutton";
 
 export default async function Header() {
-  const user = await currentUser();
+  const user = await getCurrentUser();
   return (
     <div className="flex flex-row gap-5 w-full justify-between px-5 py-3 bg-blue-950">
       <Link href="/" className="text-2xl text-white font-bold">

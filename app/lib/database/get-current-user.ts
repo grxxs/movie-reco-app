@@ -3,7 +3,7 @@ import { Prisma } from "@/generated/prisma/client";
 import { createClient } from "@/app/lib/supabase/server";
 import type { User } from "@/generated/prisma/client";
 
-export async function currentUser(): Promise<User | null> {
+export async function getCurrentUser(): Promise<User | null> {
   const supabase = await createClient();
   const { data } = await supabase.auth.getClaims();
 

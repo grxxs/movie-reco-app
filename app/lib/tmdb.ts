@@ -58,7 +58,7 @@ export async function fetchTitleDetails({
   };
 
   const response = await fetch(
-    `https://api.themoviedb.org/3/${type}/${id}?language=pl-PL`,
+    `https://api.themoviedb.org/3/${type}/${id}?language=pl-PL&append_to_response=keywords`,
     {
       ...options,
       signal: AbortSignal.timeout(5000),
@@ -76,7 +76,7 @@ export async function fetchTitleDetails({
   }
 
   switch (type) {
-    case "movie":
+    case "movie": {
       const movieDetails: MovieDetails = await response.json();
       return {
         id: movieDetails.id,
@@ -87,8 +87,10 @@ export async function fetchTitleDetails({
         posterPath: movieDetails.poster_path,
         genres: movieDetails.genres,
         backdropPath: movieDetails.backdrop_path,
+        keywords: movieDetails.keywords.keywords,
       };
-    case "tv":
+    }
+    case "tv": {
       const tvDetails: TvDetails = await response.json();
       return {
         id: tvDetails.id,
@@ -99,6 +101,8 @@ export async function fetchTitleDetails({
         posterPath: tvDetails.poster_path,
         genres: tvDetails.genres,
         backdropPath: tvDetails.backdrop_path,
+        keywords: tvDetails.keywords.results,
       };
+    }
   }
 }
