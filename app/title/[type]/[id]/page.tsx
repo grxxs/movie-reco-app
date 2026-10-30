@@ -9,7 +9,7 @@ import { getTypeDB } from "@/app/lib/format/fromat-helper";
 export default async function Title({
   params,
 }: {
-  params: Promise<{ type: "movie" | "tv"; id: string }>;
+  params: Promise<{ type: string; id: string }>;
 }) {
   const { type, id } = await params;
   const validatedFields = URLParamsSchema.safeParse({
@@ -34,7 +34,7 @@ export default async function Title({
   let isUser: boolean = false;
 
   if (user) {
-    const typeDB = getTypeDB(type);
+    const typeDB = getTypeDB(validatedFields.data.type);
     isOnList = await isProductionOnList(
       user.id,
       validatedFields.data.id,
@@ -44,6 +44,10 @@ export default async function Title({
   }
 
   return (
-    <SearchResultDetails details={details} user={isUser} onList={isOnList} />
+    <SearchResultDetails
+      details={details}
+      isLoggedIn={isUser}
+      onList={isOnList}
+    />
   );
 }

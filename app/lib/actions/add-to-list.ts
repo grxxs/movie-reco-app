@@ -6,6 +6,9 @@ import { redirect } from "next/navigation";
 import { fetchTitleDetails } from "../tmdb";
 import { getTypeDB } from "../format/fromat-helper";
 import { revalidatePath } from "next/cache";
+import { isProductionOnList } from "../database/check-production";
+import { addProductionToList } from "../database/add-production-to-list";
+import { Prisma } from "@/generated/prisma/client";
 
 export async function addTitleToList(
   state: AddTitleFormState,
@@ -26,6 +29,14 @@ export async function addTitleToList(
       message: "Nieprawidłowe dane",
     };
   }
+
+  const typeDB = getTypeDB(validatedFields.data.type);
+  if (await isProductionOnList(user.id, validatedFields.data.id, typeDB)) {
+    return {
+      message: "Tytuł został już dodany",
+    };
+  }
+
   const details = await fetchTitleDetails({
     id: validatedFields.data.id,
     type: validatedFields.data.type,
@@ -37,14 +48,23 @@ export async function addTitleToList(
     };
   }
 
-  const typeDB = getTypeDB(validatedFields.data.type);
-  const date = details.releaseDate ? new Date(details.releaseDate) : null;
+  const dateDB = details.releaseDate ? new Date(details.releaseDate) : null;
 
-  //tu zapis
-
+  try {
+    await addProductionToList({ details, typeDB, dateDB, userId: user.id });
+  } catch (e) {
+    if (
+      e instanceof Prisma.PrismaClientKnownRequestError &&
+      e.code === "P2002" &&
+      e.meta?.modelName === "LisItem"
+    ) {
+      return { message: "Tytuł został już dodany" };
+    }
+    throw e;
+  }
   revalidatePath(
     `/title/${validatedFields.data.type}/${validatedFields.data.id}`,
   );
 
-  return { errors: {}, message: "dodano" };
+  return { errors: {}, message: "Dodano do listy" };
 }

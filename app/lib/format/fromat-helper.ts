@@ -1,3 +1,5 @@
+import { MediaType } from "@/generated/prisma/enums";
+
 export function getType(name: "movie" | "tv" | "person") {
   switch (name) {
     case "movie":
@@ -9,7 +11,7 @@ export function getType(name: "movie" | "tv" | "person") {
   }
 }
 
-export function getTypeDB(name: "movie" | "tv") {
+export function getTypeDB(name: "movie" | "tv"): MediaType {
   switch (name) {
     case "movie":
       return "MOVIE";

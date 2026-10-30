@@ -5,18 +5,18 @@ import AddToList from "./add-to-list";
 
 export function SearchResultDetails({
   details,
-  user,
+  isLoggedIn,
   onList,
 }: {
   details: TitleDetails;
-  user: boolean;
+  isLoggedIn: boolean;
   onList: boolean;
 }) {
   let status: "logged" | "added" | "guest" = "guest";
 
-  if (user && !onList) {
+  if (isLoggedIn && !onList) {
     status = "logged";
-  } else if (user && onList) {
+  } else if (isLoggedIn && onList) {
     status = "added";
   } else {
     status = "guest";

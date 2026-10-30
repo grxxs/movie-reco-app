@@ -122,8 +122,8 @@ export type RegisterFormState = {
 
 export type AddTitleFormState = {
   errors?: {
-    id?: number;
-    type?: MediaTypeEnum;
+    id?: string[];
+    type?: string[];
   };
   message?: string | null;
 };
