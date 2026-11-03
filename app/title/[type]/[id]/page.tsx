@@ -1,11 +1,10 @@
 import { fetchTitleDetails } from "@/app/lib/tmdb";
-import { URLParamsSchema } from "@/app/lib/definitions";
+import { URLParamsSchema, ListItem } from "@/app/lib/definitions";
 import { notFound } from "next/navigation";
 import { SearchResultDetails } from "@/app/components/search-results-details";
 import { getCurrentUser } from "@/app/lib/database/get-current-user";
 import { getListItem } from "@/app/lib/database/check-production";
 import { getTypeDB } from "@/app/lib/format/fromat-helper";
-import { WatchStatus } from "@/generated/prisma/enums";
 
 export default async function Title({
   params,
@@ -31,7 +30,7 @@ export default async function Title({
   }
 
   const user = await getCurrentUser();
-  let listItem: { status: WatchStatus; rating: number | null } | null = null;
+  let listItem: ListItem = null;
   let isUser: boolean = false;
 
   if (user) {

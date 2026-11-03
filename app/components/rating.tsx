@@ -1,9 +1,8 @@
 "use client";
 import { useState, useActionState } from "react";
 import { GoStarFill } from "react-icons/go";
-import { MediaTypeEnum } from "@/app/lib/definitions";
+import { MediaTypeEnum, AddRatingFormState } from "@/app/lib/definitions";
 import { rateTitle } from "../lib/actions/rate-title";
-import { AddRatingFormState } from "@/app/lib/definitions";
 
 const hovers = {
   hover: "text-yellow-300",

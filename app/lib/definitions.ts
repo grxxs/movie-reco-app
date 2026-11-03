@@ -1,4 +1,5 @@
 import * as z from "zod";
+import { WatchStatus } from "@/generated/prisma/enums";
 
 export interface GenreOrKeyword {
   id: number;
@@ -140,3 +141,5 @@ export type AddRatingFormState = {
 export const AddRatingFormSchema = URLParamsSchema.extend({
   rating: z.coerce.number().int().positive().min(1).max(5),
 });
+
+export type ListItem = { status: WatchStatus; rating: number | null } | null;

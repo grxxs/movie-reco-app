@@ -1,12 +1,12 @@
 import { prisma } from "@/app/lib/prisma";
 import { MediaType } from "@/generated/prisma/enums";
-import { WatchStatus } from "@/generated/prisma/enums";
+import { ListItem } from "../definitions";
 
 export async function getListItem(
   userId: string,
   tmdbId: number,
   type: MediaType,
-): Promise<{ status: WatchStatus; rating: number | null } | null> {
+): Promise<ListItem> {
   const isOnList = await prisma.listItem.findFirst({
     select: {
       status: true,

@@ -1,10 +1,9 @@
-import { TitleDetails } from "../lib/definitions";
+import { TitleDetails, ListItem } from "../lib/definitions";
 import { getType, getYear } from "../lib/format/fromat-helper";
 import Rating from "./rating";
 import Image from "next/image";
 import AddToList from "./add-to-list";
-import { WatchStatus } from "@/generated/prisma/enums";
-import RatingNotLogged from "./rating-not-loggex";
+import RatingNotLogged from "./rating-not-logged";
 
 export function SearchResultDetails({
   details,
@@ -13,7 +12,7 @@ export function SearchResultDetails({
 }: {
   details: TitleDetails;
   isLoggedIn: boolean;
-  listItem: { status: WatchStatus; rating: number | null } | null;
+  listItem: ListItem;
 }) {
   let status: "logged" | "added" | "guest" = "guest";
 
