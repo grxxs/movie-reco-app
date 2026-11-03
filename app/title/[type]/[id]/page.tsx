@@ -3,8 +3,9 @@ import { URLParamsSchema } from "@/app/lib/definitions";
 import { notFound } from "next/navigation";
 import { SearchResultDetails } from "@/app/components/search-results-details";
 import { getCurrentUser } from "@/app/lib/database/get-current-user";
-import { isProductionOnList } from "@/app/lib/database/check-production";
+import { getListItem } from "@/app/lib/database/check-production";
 import { getTypeDB } from "@/app/lib/format/fromat-helper";
+import { WatchStatus } from "@/generated/prisma/enums";
 
 export default async function Title({
   params,
@@ -30,16 +31,12 @@ export default async function Title({
   }
 
   const user = await getCurrentUser();
-  let isOnList: boolean = false;
+  let listItem: { status: WatchStatus; rating: number | null } | null = null;
   let isUser: boolean = false;
 
   if (user) {
     const typeDB = getTypeDB(validatedFields.data.type);
-    isOnList = await isProductionOnList(
-      user.id,
-      validatedFields.data.id,
-      typeDB,
-    );
+    listItem = await getListItem(user.id, validatedFields.data.id, typeDB);
     isUser = true;
   }
 
@@ -47,7 +44,7 @@ export default async function Title({
     <SearchResultDetails
       details={details}
       isLoggedIn={isUser}
-      onList={isOnList}
+      listItem={listItem}
     />
   );
 }

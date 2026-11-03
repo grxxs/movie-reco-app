@@ -1,17 +1,21 @@
 import { TitleDetails } from "../definitions";
-import { MediaType } from "@/generated/prisma/enums";
 import { prisma } from "@/app/lib/prisma";
+import { WatchStatus, MediaType } from "@/generated/prisma/enums";
 
 export async function addProductionToList({
   details,
   typeDB,
   dateDB,
   userId,
+  rating,
+  status,
 }: {
   details: TitleDetails;
   typeDB: MediaType;
   dateDB: Date | null;
   userId: string;
+  rating?: number | null;
+  status?: WatchStatus;
 }) {
   await prisma.$transaction(async (tx) => {
     const upsertProduction = await tx.production.upsert({
@@ -68,6 +72,8 @@ export async function addProductionToList({
       data: {
         productionId: upsertProduction.id,
         userId: userId,
+        rating: rating,
+        status: status,
       },
     });
   });

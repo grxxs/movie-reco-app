@@ -1,22 +1,25 @@
 import { TitleDetails } from "../lib/definitions";
 import { getType, getYear } from "../lib/format/fromat-helper";
+import Rating from "./rating";
 import Image from "next/image";
 import AddToList from "./add-to-list";
+import { WatchStatus } from "@/generated/prisma/enums";
+import RatingNotLogged from "./rating-not-loggex";
 
 export function SearchResultDetails({
   details,
   isLoggedIn,
-  onList,
+  listItem,
 }: {
   details: TitleDetails;
   isLoggedIn: boolean;
-  onList: boolean;
+  listItem: { status: WatchStatus; rating: number | null } | null;
 }) {
   let status: "logged" | "added" | "guest" = "guest";
 
-  if (isLoggedIn && !onList) {
+  if (isLoggedIn && listItem === null) {
     status = "logged";
-  } else if (isLoggedIn && onList) {
+  } else if (isLoggedIn && listItem !== null) {
     status = "added";
   } else {
     status = "guest";
@@ -54,7 +57,7 @@ export function SearchResultDetails({
           className="z-10 shrink-0 self-start w-[266px] h-[400px] -mt-[170px] object-cover rounded-md shadow-xl/35"
         />
         <div className="my-4 flex flex-col gap-1 min-w-[350px] flex-1">
-          <p className="text-2xl">{details.title}</p>
+          <p className="text-3xl self-start font-medium">{details.title}</p>
           <p className="text-lg">
             {getType(details.mediaType)}
             {getYear(details.releaseDate) &&
@@ -86,6 +89,15 @@ export function SearchResultDetails({
           </div>
           <AddToList status={status} details={details} />
         </div>
+        {isLoggedIn ? (
+          <Rating
+            id={details.id}
+            type={details.mediaType}
+            rating={listItem?.rating ?? 0}
+          />
+        ) : (
+          <RatingNotLogged />
+        )}
       </div>
     </div>
   );

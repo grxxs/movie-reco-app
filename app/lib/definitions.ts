@@ -127,3 +127,16 @@ export type AddTitleFormState = {
   };
   message?: string | null;
 };
+
+export type AddRatingFormState = {
+  errors?: {
+    id?: string[];
+    type?: string[];
+    rating?: string[];
+  };
+  message?: string | null;
+};
+
+export const AddRatingFormSchema = URLParamsSchema.extend({
+  rating: z.coerce.number().int().positive().min(1).max(5),
+});

@@ -17,7 +17,9 @@ export default async function Header() {
             Witaj, <span className="font-bold">{user.username}</span>
           </p>
           <form action={logout}>
-            <Button type="submit">Wyloguj</Button>
+            <Button type="submit" className="cursor-pointer">
+              Wyloguj
+            </Button>
           </form>
         </div>
       ) : (

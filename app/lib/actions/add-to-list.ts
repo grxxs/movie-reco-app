@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { fetchTitleDetails } from "../tmdb";
 import { getTypeDB } from "../format/fromat-helper";
 import { revalidatePath } from "next/cache";
-import { isProductionOnList } from "../database/check-production";
+import { getListItem } from "../database/check-production";
 import { addProductionToList } from "../database/add-production-to-list";
 import { Prisma } from "@/generated/prisma/client";
 
@@ -31,7 +31,7 @@ export async function addTitleToList(
   }
 
   const typeDB = getTypeDB(validatedFields.data.type);
-  if (await isProductionOnList(user.id, validatedFields.data.id, typeDB)) {
+  if ((await getListItem(user.id, validatedFields.data.id, typeDB)) !== null) {
     return {
       message: "Tytuł został już dodany",
     };
@@ -56,7 +56,7 @@ export async function addTitleToList(
     if (
       e instanceof Prisma.PrismaClientKnownRequestError &&
       e.code === "P2002" &&
-      e.meta?.modelName === "LisItem"
+      e.meta?.modelName === "ListItem"
     ) {
       return { message: "Tytuł został już dodany" };
     }

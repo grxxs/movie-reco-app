@@ -1,14 +1,16 @@
 import { prisma } from "@/app/lib/prisma";
 import { MediaType } from "@/generated/prisma/enums";
+import { WatchStatus } from "@/generated/prisma/enums";
 
-export async function isProductionOnList(
+export async function getListItem(
   userId: string,
   tmdbId: number,
   type: MediaType,
-): Promise<boolean> {
+): Promise<{ status: WatchStatus; rating: number | null } | null> {
   const isOnList = await prisma.listItem.findFirst({
     select: {
-      id: true,
+      status: true,
+      rating: true,
     },
     where: {
       userId: userId,
@@ -18,8 +20,8 @@ export async function isProductionOnList(
       },
     },
   });
-  if (isOnList) {
-    return true;
+  if (isOnList !== null) {
+    return isOnList;
   }
-  return false;
+  return null;
 }
