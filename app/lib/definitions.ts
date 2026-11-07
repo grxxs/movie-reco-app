@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { WatchStatus } from "@/generated/prisma/enums";
+import { WatchStatus, MediaType } from "@/generated/prisma/enums";
 
 export interface GenreOrKeyword {
   id: number;
@@ -143,3 +143,16 @@ export const AddRatingFormSchema = URLParamsSchema.extend({
 });
 
 export type ListItem = { status: WatchStatus; rating: number | null } | null;
+
+export type UserList = {
+  id: string;
+  rating: number | null;
+  status: WatchStatus;
+  production: {
+    tmdbId: number;
+    mediaType: MediaType;
+    title: string;
+    posterPath: string | null;
+    releaseDate: Date | null;
+  };
+}[];
