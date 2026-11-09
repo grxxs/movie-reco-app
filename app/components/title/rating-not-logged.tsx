@@ -1,5 +1,5 @@
 import { GoStarFill } from "react-icons/go";
-import LinkButton from "@/app/components/linkbutton";
+import LinkButton from "@/app/components/ui/linkbutton";
 
 export default function RatingNotLogged() {
   return (

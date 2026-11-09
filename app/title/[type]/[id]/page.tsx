@@ -1,7 +1,7 @@
 import { fetchTitleDetails } from "@/app/lib/tmdb";
 import { URLParamsSchema, ListItem } from "@/app/lib/definitions";
 import { notFound } from "next/navigation";
-import { SearchResultDetails } from "@/app/components/search-results-details";
+import { SearchResultDetails } from "@/app/components/title/search-results-details";
 import { getCurrentUser } from "@/app/lib/database/get-current-user";
 import { getListItem } from "@/app/lib/database/check-production";
 import { getTypeDB } from "@/app/lib/format/fromat-helper";

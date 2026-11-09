@@ -1,6 +1,6 @@
-import { fetchSearchResults } from "../lib/tmdb";
-import { TMDBResponseElement } from "../lib/definitions";
-import SearchResult from "../components/search-results-element";
+import { fetchSearchResults } from "../../lib/tmdb";
+import { TMDBResponseElement } from "../../lib/definitions";
+import SearchResult from "./search-results-element";
 import SearchMessage from "./search-message";
 
 export default async function SearchResults({ query }: { query: string }) {

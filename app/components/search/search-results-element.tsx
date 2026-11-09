@@ -1,5 +1,5 @@
-import type { TMDBResponseElement } from "../lib/definitions";
-import { getType, getYear } from "../lib/format/fromat-helper";
+import type { TMDBResponseElement } from "../../lib/definitions";
+import { getType, getYear } from "../../lib/format/fromat-helper";
 import Image from "next/image";
 import Link from "next/link";
 

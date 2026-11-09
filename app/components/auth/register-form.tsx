@@ -3,7 +3,7 @@
 import { register } from "@/app/lib/actions/register";
 import { useActionState } from "react";
 import { RegisterFormState } from "@/app/lib/definitions";
-import Button from "../button";
+import Button from "../ui/button";
 import Link from "next/link";
 
 export default function RegisterForm() {

@@ -2,8 +2,8 @@
 
 import { useActionState } from "react";
 import { AddTitleFormState, MediaTypeEnum } from "@/app/lib/definitions";
-import { addTitleToList } from "../lib/actions/add-to-list";
-import Button from "@/app/components/button";
+import { addTitleToList } from "../../lib/actions/add-to-list";
+import Button from "@/app/components/ui/button";
 
 export default function AddToListForm({
   id,

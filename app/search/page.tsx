@@ -1,4 +1,4 @@
-import SearchResults from "../components/search-results";
+import SearchResults from "../components/search/search-results";
 
 export default async function Search(props: {
   searchParams?: Promise<{ search?: string }>;

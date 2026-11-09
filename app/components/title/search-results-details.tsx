@@ -1,5 +1,5 @@
-import { TitleDetails, ListItem } from "../lib/definitions";
-import { getType, getYear } from "../lib/format/fromat-helper";
+import { TitleDetails, ListItem } from "../../lib/definitions";
+import { getType, getYear } from "../../lib/format/fromat-helper";
 import Rating from "./rating";
 import Image from "next/image";
 import AddToList from "./add-to-list";

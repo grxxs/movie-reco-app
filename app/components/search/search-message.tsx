@@ -1,4 +1,4 @@
-import LinkButton from "./linkbutton";
+import LinkButton from "../ui/linkbutton";
 
 export default function SearchMessage({ message }: { message: string }) {
   return (

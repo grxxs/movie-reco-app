@@ -2,7 +2,7 @@
 import { useState, useActionState } from "react";
 import { GoStarFill } from "react-icons/go";
 import { MediaTypeEnum, AddRatingFormState } from "@/app/lib/definitions";
-import { rateTitle } from "../lib/actions/rate-title";
+import { rateTitle } from "../../lib/actions/rate-title";
 
 const hovers = {
   hover: "text-yellow-500",

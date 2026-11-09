@@ -1,7 +1,7 @@
 "use client";
 
 import { MdError } from "react-icons/md";
-import LinkButton from "@/app/components/linkbutton";
+import LinkButton from "@/app/components/ui/linkbutton";
 
 export default function Error() {
   return (

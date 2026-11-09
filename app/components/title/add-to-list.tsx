@@ -1,6 +1,6 @@
-import LinkButton from "./linkbutton";
+import LinkButton from "../ui/linkbutton";
 import AddToListForm from "./add-to-list-form";
-import { TitleDetails } from "../lib/definitions";
+import { TitleDetails } from "../../lib/definitions";
 
 export default function AddToList({
   status,

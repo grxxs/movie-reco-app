@@ -2,9 +2,9 @@ import { getCurrentUser } from "../lib/database/get-current-user";
 import { getUserList } from "../lib/database/get-productions";
 import { redirect } from "next/navigation";
 import { UserList } from "../components/list/user-list";
-import LinkButton from "../components/linkbutton";
+import LinkButton from "../components/ui/linkbutton";
 import { FaCircleUser } from "react-icons/fa6";
-import { AscendingNumber } from "../components/ascending-number";
+import { AscendingNumber } from "../components/list/ascending-number";
 import { listStatusString } from "../lib/definitions";
 
 export default async function List() {

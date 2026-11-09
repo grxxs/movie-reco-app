@@ -2,7 +2,7 @@ import { UserListElementType } from "@/app/lib/definitions";
 import Link from "next/link";
 import Image from "next/image";
 import { getTypeTMDB, getYear, getType } from "@/app/lib/format/fromat-helper";
-import Rating from "../rating";
+import Rating from "../title/rating";
 import SelectStatus from "./status-select";
 import { deleteTitle } from "@/app/lib/actions/delete-title";
 

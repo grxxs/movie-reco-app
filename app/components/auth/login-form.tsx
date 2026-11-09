@@ -3,7 +3,7 @@
 import { login } from "@/app/lib/actions/login";
 import { useActionState } from "react";
 import { LogInFormState } from "@/app/lib/definitions";
-import Button from "@/app/components/button";
+import Button from "@/app/components/ui/button";
 import Link from "next/link";
 
 export default function LoginForm() {

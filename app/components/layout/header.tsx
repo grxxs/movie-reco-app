@@ -1,8 +1,8 @@
 import { logout } from "@/app/lib/actions/logout";
-import Button from "./button";
-import { getCurrentUser } from "../lib/database/get-current-user";
+import Button from "../ui/button";
+import { getCurrentUser } from "../../lib/database/get-current-user";
 import Link from "next/link";
-import LinkButton from "./linkbutton";
+import LinkButton from "../ui/linkbutton";
 
 export default async function Header() {
   const user = await getCurrentUser();

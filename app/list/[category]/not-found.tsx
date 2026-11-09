@@ -1,5 +1,5 @@
 import { MdFolderOff } from "react-icons/md";
-import LinkButton from "@/app/components/linkbutton";
+import LinkButton from "@/app/components/ui/linkbutton";
 
 export default function NotFound() {
   return (
