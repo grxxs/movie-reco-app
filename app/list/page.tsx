@@ -5,6 +5,7 @@ import { UserList } from "../components/list/user-list";
 import LinkButton from "../components/linkbutton";
 import { FaCircleUser } from "react-icons/fa6";
 import { AscendingNumber } from "../components/ascending-number";
+import { listStatusString } from "../lib/definitions";
 
 export default async function List() {
   const user = await getCurrentUser();
@@ -15,7 +16,7 @@ export default async function List() {
   const list = await getUserList(user.id);
   const watched = list.filter((title) => title.status === "WATCHED");
   const watching = list.filter((title) => title.status === "WATCHING");
-  const toWatch = list.filter((title) => title.status === "PLANNED");
+  const planned = list.filter((title) => title.status === "PLANNED");
   const highestRating = list
     .filter((title) => title.rating !== null)
     .toSorted((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
@@ -41,14 +42,14 @@ export default async function List() {
             <p className="text-xs">OBEJRZANE</p>
           </div>
           <div className="flex flex-col items-center px-2 ">
-            <AscendingNumber number={toWatch.length} />
+            <AscendingNumber number={planned.length} />
             <p className="text-xs">ZAPLANOWANE</p>
           </div>
         </div>
       </div>
       <div className="flex flex-col gap-3">
         {list.length > 0 ? (
-          <UserList list={list} title="Ostatnio dodane" />
+          <UserList list={list} title={listStatusString.recent} href="recent" />
         ) : (
           <div className="flex flex-col gap-1 items-center mt-5">
             <p className="font-bold text-lg">
@@ -65,13 +66,33 @@ export default async function List() {
             </LinkButton>
           </div>
         )}
-        {toWatch.length > 0 && (
-          <UserList list={toWatch} title="Do obejrzenia" />
+        {planned.length > 0 && (
+          <UserList
+            list={planned}
+            title={listStatusString.planned}
+            href="planned"
+          />
         )}
-        {watched.length > 0 && <UserList list={watched} title="Obejrzane" />}
-        {watching.length > 0 && <UserList list={watching} title="W trakcie" />}
+        {watched.length > 0 && (
+          <UserList
+            list={watched}
+            title={listStatusString.watched}
+            href="watched"
+          />
+        )}
+        {watching.length > 0 && (
+          <UserList
+            list={watching}
+            title={listStatusString.watching}
+            href="watching"
+          />
+        )}
         {highestRating.length > 0 && (
-          <UserList list={highestRating} title="Najwyżej ocenione" />
+          <UserList
+            list={highestRating}
+            title={listStatusString.rated}
+            href="rated"
+          />
         )}
       </div>
     </div>

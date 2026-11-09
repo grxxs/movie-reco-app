@@ -81,6 +81,7 @@ export async function rateTitle(
   revalidatePath(
     `/title/${validatedFields.data.type}/${validatedFields.data.id}`,
   );
+  revalidatePath("/list", "layout");
 
   return {
     errors: {},

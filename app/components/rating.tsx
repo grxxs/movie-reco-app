@@ -9,15 +9,33 @@ const hovers = {
   nohover: "text-gray-500",
 };
 
+const sizes = {
+  normal: {
+    form: "gap-2 mt-4",
+    star: "text-3xl mx-1.5",
+    submit: "text-md",
+    message: "-mt-1",
+  },
+  small: {
+    form: "gap-1",
+    star: "text-lg mx-0.5",
+    submit: "text-xs",
+    message: "text-xs min-h-4",
+  },
+};
+
 export default function Rating({
   id,
   type,
   rating,
+  size = "normal",
 }: {
   id: number;
   type: MediaTypeEnum;
   rating: number;
+  size?: "normal" | "small";
 }) {
+  const styles = sizes[size];
   const [selected, setSelected] = useState(rating);
   const [hovered, setHovered] = useState(0);
   const initialState: AddRatingFormState = { errors: {}, message: null };
@@ -37,7 +55,7 @@ export default function Rating({
   }
 
   return (
-    <form action={action} className="flex flex-col items-center gap-2 mt-4">
+    <form action={action} className={`flex flex-col items-center ${styles.form}`}>
       <div className="flex flex-row" onMouseLeave={() => handleMouseLeave()}>
         {[1, 2, 3, 4, 5].map((n) => (
           <button
@@ -48,18 +66,18 @@ export default function Rating({
             onClick={() => handleClick(n)}
             aria-label={`Oceń na ${n}`}
           >
-            <GoStarFill className="text-3xl mx-1.5" />
+            <GoStarFill className={styles.star} />
           </button>
         ))}
       </div>
       <button
         type="submit"
-        className="text-md w-full bg-yellow-500 rounded-2xl py-0.5 font-bold hover:bg-yellow-400 transition-colors duration-200 ease-in-out cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+        className={`${styles.submit} w-full bg-yellow-500 rounded-2xl py-0.5 font-bold hover:bg-yellow-400 transition-colors duration-200 ease-in-out cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed`}
         disabled={selected === 0 || pending}
       >
         {pending ? "Zapisywanie..." : "Oceń"}
       </button>
-      <p className="-mt-1">{state.message}</p>
+      <p className={styles.message}>{state.message}</p>
       <input type="hidden" name="type" value={type} />
       <input type="hidden" name="id" value={id} />
       <input type="hidden" name="rating" value={selected} />

@@ -69,6 +69,10 @@ export const URLParamsSchema = z.object({
   type: z.enum(["movie", "tv"]),
 });
 
+export const ListURLParamsSchema = z.object({
+  category: z.enum(["planned", "watching", "watched", "recent", "rated"]),
+});
+
 export const LogInFormSchema = z.object({
   email: z
     .string()
@@ -167,4 +171,12 @@ export type UserListElementType = {
     posterPath: string | null;
     releaseDate: Date | null;
   };
+};
+
+export const listStatusString = {
+  recent: "Ostatnio dodane",
+  planned: "Do obejrzenia",
+  watched: "Obejrzane",
+  watching: "W trakcie",
+  rated: "Najwyzej ocenione",
 };
