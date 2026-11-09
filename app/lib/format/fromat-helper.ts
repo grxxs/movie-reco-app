@@ -1,4 +1,5 @@
 import { MediaType } from "@/generated/prisma/enums";
+import { MediaTypeEnum } from "../definitions";
 
 export function getType(name: "movie" | "tv" | "person") {
   switch (name) {
@@ -17,6 +18,15 @@ export function getTypeDB(name: "movie" | "tv"): MediaType {
       return "MOVIE";
     case "tv":
       return "TV";
+  }
+}
+
+export function getTypeTMDB(name: "MOVIE" | "TV"): MediaTypeEnum {
+  switch (name) {
+    case "MOVIE":
+      return "movie";
+    case "TV":
+      return "tv";
   }
 }
 

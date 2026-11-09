@@ -17,7 +17,7 @@ export default function AddToList({
       return (
         <Button
           disabled
-          className="w-1/4 min-w-[230px] text-center self-start bg-gray-600 border border-transparent hover:bg-gray-600 mt-3"
+          className="w-full text-center bg-gray-600 border border-transparent hover:bg-gray-600 mt-3"
         >
           Na liście
         </Button>
@@ -27,7 +27,7 @@ export default function AddToList({
         <>
           <LinkButton
             href="/login"
-            className="w-1/4 min-w-[230px] text-center self-start bg-yellow-300 text-black border-transparent hover:bg-yellow-400 hover:text-black mt-3"
+            className="w-full text-center  bg-yellow-300 text-black border-transparent hover:bg-yellow-400 hover:text-black mt-3"
           >
             Zacznij tworzyć swoją listę
           </LinkButton>

@@ -5,7 +5,7 @@ import { MediaTypeEnum, AddRatingFormState } from "@/app/lib/definitions";
 import { rateTitle } from "../lib/actions/rate-title";
 
 const hovers = {
-  hover: "text-yellow-300",
+  hover: "text-yellow-500",
   nohover: "text-gray-500",
 };
 
@@ -54,7 +54,7 @@ export default function Rating({
       </div>
       <button
         type="submit"
-        className="text-lg w-full bg-yellow-300 rounded-3xl py-0.5 font-bold hover:bg-yellow-400 transition-colors duration-200 ease-in-out cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+        className="text-md w-full bg-yellow-500 rounded-2xl py-0.5 font-bold hover:bg-yellow-400 transition-colors duration-200 ease-in-out cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
         disabled={selected === 0 || pending}
       >
         {pending ? "Zapisywanie..." : "Oceń"}

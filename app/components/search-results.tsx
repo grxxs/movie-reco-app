@@ -26,7 +26,7 @@ export default async function SearchResults({ query }: { query: string }) {
     <div className="flex flex-1 flex-col items-center divide-y-2 divide-gray-200 divide-solid">
       <p className="text-xl font-bold py-2">Wyniki wyszukiwania:</p>
       {results.map((el) => (
-        <SearchResult item={el} key={el.id} />
+        <SearchResult item={el} key={el.id + el.media_type} />
       ))}
     </div>
   );

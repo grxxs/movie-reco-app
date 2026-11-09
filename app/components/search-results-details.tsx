@@ -31,19 +31,19 @@ export function SearchResultDetails({
           style={{
             backgroundImage: `url("https://image.tmdb.org/t/p/w1280${details.backdropPath}")`,
           }}
-          className="h-90 w-full bg-no-repeat bg-center bg-black relative"
+          className="h-70 w-full bg-no-repeat bg-position-[center_25%] bg-black relative"
         >
           <div className="w-full max-w-[1280px] bg-linear-to-r inset-0 mx-auto from-black from-2% via-transparent via-50% to-black to-96% absolute ">
             {" "}
           </div>
         </div>
       ) : (
-        <div className="h-90 w-full bg-black relative text-white text-center flex items-center justify-center font-bold text-6xl">
+        <div className="h-70 w-full bg-black relative text-white text-center flex items-center justify-center font-bold text-4xl">
           {details.title}
         </div>
       )}
 
-      <div className="flex flex-row px-5 w-full max-w-[1280px] mx-auto gap-6">
+      <div className="flex flex-row px-5 w-full max-w-[950px] mx-auto gap-6">
         <Image
           src={
             details.posterPath
@@ -51,13 +51,13 @@ export function SearchResultDetails({
               : "/poster-placeholder.jpg"
           }
           alt={details.title || "Plakat"}
-          width={266}
-          height={400}
-          className="z-10 shrink-0 self-start w-[266px] h-[400px] -mt-[170px] object-cover rounded-md shadow-xl/35"
+          width={220}
+          height={330}
+          className="z-10 shrink-0 self-start w-[220px] h-[330px] -mt-25 object-cover rounded-sm shadow-xl/25"
         />
         <div className="my-4 flex flex-col gap-1 min-w-[350px] flex-1">
-          <p className="text-3xl self-start font-medium">{details.title}</p>
-          <p className="text-lg">
+          <p className="text-2xl self-start font-semibold">{details.title}</p>
+          <p className="text-sm">
             {getType(details.mediaType)}
             {getYear(details.releaseDate) &&
               ` · ${getYear(details.releaseDate)}`}
@@ -67,7 +67,7 @@ export function SearchResultDetails({
               {details.genres.map((genre) => {
                 return (
                   <p
-                    className="border rounded-full px-2 py-1 text-xs"
+                    className="border rounded-full px-1 py-0.5 text-xs"
                     key={genre.id}
                   >
                     {genre.name}
@@ -78,25 +78,28 @@ export function SearchResultDetails({
           )}
 
           <div className="mt-2">
-            <p className="font-bold text-lg">Opis</p>
+            <p className="font-semibold text-lg">Opis</p>
 
             {details.overview ? (
-              <p className="text-lg">{details.overview}</p>
+              <p className="text-sm">{details.overview}</p>
             ) : (
               <p className="text-lg opacity-50">Brak opisu do wyświetlenia</p>
             )}
           </div>
+        </div>
+
+        <div className="self-start min-h-44 flex flex-col px-2 py-3 z-10 -mt-5 bg-white shadow-lg/10 rounded">
+          {isLoggedIn ? (
+            <Rating
+              id={details.id}
+              type={details.mediaType}
+              rating={listItem?.rating ?? 0}
+            />
+          ) : (
+            <RatingNotLogged />
+          )}
           <AddToList status={status} details={details} />
         </div>
-        {isLoggedIn ? (
-          <Rating
-            id={details.id}
-            type={details.mediaType}
-            rating={listItem?.rating ?? 0}
-          />
-        ) : (
-          <RatingNotLogged />
-        )}
       </div>
     </div>
   );

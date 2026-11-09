@@ -96,9 +96,8 @@ export const RegisterFormSchema = z.object({
     .trim()
     .min(3, { error: "Nazwa użytkownika musi mieć od 3 do 20 znaków" })
     .max(20, { error: "Nazwa użytkownika musi mieć od 3 do 20 znaków" })
-    .regex(/^[a-z0-9_]+$/, {
-      error:
-        "Nazwa użytkownika może zawierać tylko małe litery, cyfry i znak _",
+    .regex(/^[a-zA-Z0-9_]+$/, {
+      error: "Nazwa użytkownika może zawierać tylko litery, cyfry i znak _",
     }),
   password: z
     .string()
@@ -144,7 +143,7 @@ export const AddRatingFormSchema = URLParamsSchema.extend({
 
 export type ListItem = { status: WatchStatus; rating: number | null } | null;
 
-export type UserList = {
+export type UserListType = {
   id: string;
   rating: number | null;
   status: WatchStatus;
@@ -156,3 +155,16 @@ export type UserList = {
     releaseDate: Date | null;
   };
 }[];
+
+export type UserListElementType = {
+  id: string;
+  rating: number | null;
+  status: WatchStatus;
+  production: {
+    tmdbId: number;
+    mediaType: MediaType;
+    title: string;
+    posterPath: string | null;
+    releaseDate: Date | null;
+  };
+};

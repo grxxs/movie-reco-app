@@ -15,7 +15,7 @@ export default function AddToListForm({
   const initialState: AddTitleFormState = { message: null, errors: {} };
   const [state, action, pending] = useActionState(addTitleToList, initialState);
   return (
-    <form action={action} className="w-1/4 min-w-[230px] mt-3">
+    <form action={action} className="w-full mt-3">
       <input type="hidden" name="type" value={type} />
       <input type="hidden" name="id" value={id} />
       <Button

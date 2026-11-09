@@ -1,7 +1,7 @@
 import { prisma } from "@/app/lib/prisma";
-import { UserList } from "../definitions";
+import { UserListType } from "../definitions";
 
-export async function getUserList(userId: string): Promise<UserList> {
+export async function getUserList(userId: string): Promise<UserListType> {
   const userList = await prisma.listItem.findMany({
     where: {
       userId: userId,
@@ -21,7 +21,7 @@ export async function getUserList(userId: string): Promise<UserList> {
       },
     },
     orderBy: {
-      updatedAt: "desc",
+      createdAt: "desc",
     },
   });
 

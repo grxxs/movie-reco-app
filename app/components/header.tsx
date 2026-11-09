@@ -14,7 +14,13 @@ export default async function Header() {
       {user ? (
         <div className="flex flex-row items-center  gap-4">
           <p className="text-white">
-            Witaj, <span className="font-bold">{user.username}</span>
+            Witaj,{" "}
+            <Link
+              href="/list"
+              className="font-bold hover:opacity-75 transition-all ease-in-out duration-100"
+            >
+              {user.username}
+            </Link>
           </p>
           <form action={logout}>
             <Button type="submit" className="cursor-pointer">
