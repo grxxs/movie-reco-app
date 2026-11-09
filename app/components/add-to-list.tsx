@@ -1,4 +1,3 @@
-import Button from "./button";
 import LinkButton from "./linkbutton";
 import AddToListForm from "./add-to-list-form";
 import { TitleDetails } from "../lib/definitions";
@@ -15,12 +14,12 @@ export default function AddToList({
       return <AddToListForm id={details.id} type={details.mediaType} />;
     case "added":
       return (
-        <Button
-          disabled
-          className="w-full text-center bg-gray-600 border border-transparent hover:bg-gray-600 mt-3"
+        <LinkButton
+          href="/list/recent"
+          className="w-full text-center border-transparent bg-blue-500 hover:bg-blue-700 text-white transition-colors mt-3"
         >
-          Na liście
-        </Button>
+          Zarządzaj listą
+        </LinkButton>
       );
     default:
       return (

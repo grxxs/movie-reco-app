@@ -3,6 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { getTypeTMDB, getYear, getType } from "@/app/lib/format/fromat-helper";
 import Rating from "../rating";
+import SelectStatus from "./status-select";
+import { deleteTitle } from "@/app/lib/actions/delete-title";
 
 export function UserCategoryListElement({
   title,
@@ -32,16 +34,32 @@ export function UserCategoryListElement({
         <p className="font-semibold line-clamp-2">{title.production.title}</p>
         <p className="text-sm text-gray-500">
           {getType(getTypeTMDB(title.production.mediaType))}
-          {" ·O "}
+          {" · "}
           {getYear(title.production.releaseDate?.toISOString()) ?? ""}
         </p>
       </div>
-      <Rating
-        id={title.production.tmdbId}
-        type={getTypeTMDB(title.production.mediaType)}
-        rating={title.rating ?? 0}
-        size="small"
-      />
+      <div className="flex flex-col gap-2 w-32 shrink-0">
+        <Rating
+          id={title.production.tmdbId}
+          type={getTypeTMDB(title.production.mediaType)}
+          rating={title.rating ?? 0}
+          size="small"
+        />
+        <SelectStatus
+          id={title.id}
+          titleStatus={title.status}
+          key={title.status}
+        />
+        <form action={deleteTitle} className="text-center">
+          <input type="hidden" name="id" value={title.id} />
+          <button
+            type="submit"
+            className="text-xs font-semibold text-red-600 hover:text-red-400 transition-colors duration-200 ease-in-out cursor-pointer"
+          >
+            Usuń z listy
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

@@ -59,11 +59,17 @@ export default async function UserCategoryList({
           </Link>
         </div>
       </div>
-      <div className="flex flex-col flex-wrap gap-4 divide-y divide-gray-300 divide-solid">
-        {list.map((title) => (
-          <UserCategoryListElement title={title} key={title.id} />
-        ))}
-      </div>
+      {list.length > 0 ? (
+        <div className="flex flex-col flex-wrap gap-4 divide-y divide-gray-300 divide-solid">
+          {list.map((title) => (
+            <UserCategoryListElement title={title} key={title.id} />
+          ))}
+        </div>
+      ) : (
+        <p className="text-center opacity-50 py-8">
+          Brak tytułów do wyświetlenia
+        </p>
+      )}
     </div>
   );
 }

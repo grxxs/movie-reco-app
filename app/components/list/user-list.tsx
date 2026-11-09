@@ -15,7 +15,7 @@ export function UserList({
   return (
     <div className="flex flex-col gap-1">
       <Link
-        href={`list/${href}`}
+        href={`/list/${href}`}
         className="group inline-flex self-start items-center gap-0.5 text-xl hover:translate-x-1 transition-transform duration-350"
       >
         {title}

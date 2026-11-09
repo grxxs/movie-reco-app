@@ -178,5 +178,22 @@ export const listStatusString = {
   planned: "Do obejrzenia",
   watched: "Obejrzane",
   watching: "W trakcie",
-  rated: "Najwyzej ocenione",
+  rated: "Najwyżej ocenione",
 };
+
+export type ChangeStatusFormState = {
+  errors?: {
+    id?: string[];
+    status?: string[];
+  };
+  message?: string | null;
+};
+
+export const ChangeStatusFormSchema = z.object({
+  id: z.uuid(),
+  status: z.enum(WatchStatus),
+});
+
+export const DeleteTitleFormSchema = z.object({
+  id: z.uuid(),
+});

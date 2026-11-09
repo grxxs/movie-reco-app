@@ -2,7 +2,7 @@
 
 Aplikacja webowa do tworzenia osobistej biblioteki obejrzanych filmów i seriali oraz do rekomendacji kolejnych tytułów algorytmem content-based filtering. Projekt realizowany w ramach pracy inżynierskiej (Politechnika Lubelska).
 
-> Status: wczesna faza implementacji. Roboczą nazwą projektu jest `movie-reco-app`.
+> Status: implementacja w toku, gotowa jest biblioteka użytkownika, rekomendacje są następnym etapem. Roboczą nazwą projektu jest `movie-reco-app`.
 
 ## Cel projektu
 
@@ -24,12 +24,14 @@ Zrobione:
 - baza danych (PostgreSQL na Supabase, ORM Prisma): schemat, migracje, włączone RLS,
 - konta użytkowników i autoryzacja (Supabase Auth, e-mail i hasło): rejestracja, logowanie, wylogowanie, odświeżanie sesji,
 - nagłówek zależny od stanu logowania,
+- dodawanie tytułów do listy wraz z zapisem produkcji, gatunków i słów kluczowych w bazie,
+- oceny w skali 1-5 (ocenienie tytułu oznacza go jako obejrzany i w razie potrzeby dodaje do listy),
+- biblioteka użytkownika: podgląd z sekcjami i licznikami (`/list`) oraz pełne widoki (`/list/{recent|planned|watching|watched|rated}`) ze zmianą oceny i statusu oraz usuwaniem tytułów,
 - wdrożenie na Vercelu.
-  Planowane:
 
-- dodawanie tytułów do listy i zapis produkcji w bazie,
-- biblioteka użytkownika: statusy, oceny w skali 1-5,
-- serwis rekomendacji w Pythonie (FastAPI),
+Planowane:
+
+- serwis rekomendacji w Pythonie (FastAPI) i widok rekomendacji,
 - zmiana i usuwanie konta,
 - panel administratora,
 - responsywny interfejs,
@@ -44,7 +46,8 @@ Zrobione:
 - Prisma ORM 7
 - TMDB API jako źródło danych o filmach i serialach
 - react-icons (ikony)
-  Planowo: Python + FastAPI (serwis rekomendacji).
+
+Planowo: Python + FastAPI (serwis rekomendacji).
 
 ## Uruchomienie lokalne
 
@@ -103,19 +106,28 @@ Plików `.env*` (poza `.env.example`) nie dodajemy do repozytorium.
 
 - Wszystkie zapytania do API TMDB wykonuje serwer (token nie trafia do przeglądarki), z językiem `pl-PL` i limitem czasu 5 s.
 - **Wyszukiwanie** odpytuje API na żywo (`search/multi`), bez zapamiętywania wyników. Pusta fraza nie wysyła zapytania.
-- **Szczegóły tytułu** pochodzą z `GET /movie/{id}` lub `GET /tv/{id}`. Odpowiedź jest mapowana na wspólny typ (`TitleDetails`), więc reszta aplikacji nie zależy od różnic między filmem a serialem (`title`/`name`, `release_date`/`first_air_date`).
+- **Szczegóły tytułu** pochodzą z `GET /movie/{id}` lub `GET /tv/{id}` razem ze słowami kluczowymi (`append_to_response=keywords`). Odpowiedź jest mapowana na wspólny typ (`TitleDetails`), więc reszta aplikacji nie zależy od różnic między filmem a serialem (`title`/`name`, `release_date`/`first_air_date`).
 - Parametry adresu strony szczegółów są walidowane (Zod): typ to `movie` albo `tv`, identyfikator to dodatnia liczba całkowita. Niepoprawny adres nie wysyła zapytania do TMDB.
 - Odpowiedź 404 z TMDB oznacza stronę "nie znaleziono", a pozostałe błędy (sieć, limit czasu, 5xx) trafiają do strony błędu.
 - Szczegóły tytułu są przechowywane w pamięci podręcznej serwera Next.js przez 24 godziny (`revalidate`), co ogranicza liczbę zapytań do TMDB i mieści się w limicie przechowywania danych z warunków użycia API.
 - Plakaty i tła ładowane są z `image.tmdb.org` (host dopuszczony w `next.config.ts` w `images.remotePatterns`), w rozmiarach dobranych do wielkości wyświetlania. Gdy tytuł nie ma plakatu, wyświetlany jest obraz zastępczy.
+
+## Biblioteka użytkownika
+
+- Tabela `productions` przechowuje tylko tytuły, z którymi ktoś coś zrobił (dodanie do listy, ocena). Wpis użytkownika (`list_items`) zawiera status i opcjonalną ocenę.
+- Statusy: `PLANNED`, `WATCHING`, `WATCHED`. Zwykłe dodanie ustawia `PLANNED`, a ocena zawsze ustawia `WATCHED`. Zmiana statusu nie usuwa oceny.
+- Lista użytkownika jest pobierana jednym zapytaniem i dzielona na widoki po stronie serwera. Niepoprawna kategoria w adresie daje stronę "nie znaleziono".
+- Status zapisuje się automatycznie 400 ms po wyborze, więc szybkie przełączanie daje jeden zapis.
+- Usunięcie tytułu z listy kasuje wpis użytkownika razem z oceną, a rekord w `productions` zostaje.
+- Każda akcja zmieniająca listę sprawdza sesję, waliduje dane (Zod) i ma identyfikator zalogowanego użytkownika w warunku zapytania, więc nie można zmienić cudzego wpisu.
 
 ## Uwierzytelnianie
 
 - Konta, hasła i sesje obsługuje Supabase Auth. Tokeny sesji są przechowywane w ciasteczkach przez pakiet `@supabase/ssr`, więc serwer Next.js widzi, kto jest zalogowany.
 - `proxy.ts` (w Next.js 16 dawniej `middleware.ts`) przy każdym żądaniu odświeża sesję. Nie decyduje o dostępie do stron.
 - Tożsamość użytkownika jest weryfikowana po stronie serwera przez `getClaims()` (sprawdzenie podpisu tokena).
-- Funkcja `currentUser()` zwraca wiersz użytkownika z własnej tabeli `users` (klucz: ten sam UUID co konto w Supabase) albo `null`. Wiersz jest tworzony przy pierwszym użyciu po zalogowaniu.
-- Strony i akcje serwerowe, które wymagają zalogowanego użytkownika, same wywołują `currentUser()`. Layout nie służy do ochrony tras.
+- Funkcja `getCurrentUser()` zwraca wiersz użytkownika z własnej tabeli `users` (klucz: ten sam UUID co konto w Supabase) albo `null`. Wiersz jest tworzony przy pierwszym użyciu po zalogowaniu.
+- Strony i akcje serwerowe, które wymagają zalogowanego użytkownika, same wywołują `getCurrentUser()`. Layout nie służy do ochrony tras.
 
 ## Skrypty
 
@@ -131,10 +143,12 @@ Plików `.env*` (poza `.env.example`) nie dodajemy do repozytorium.
 ```
 app/
   components/   komponenty współdzielone (nagłówek, stopka, przyciski, formularze,
-                wyniki wyszukiwania, widok szczegółów tytułu, komunikaty)
+                wyniki wyszukiwania, widok szczegółów tytułu, ocena, komunikaty,
+                komponenty biblioteki w list/)
   lib/          logika pomocnicza: klient TMDB, klient Prisma, klienci Supabase (supabase/),
-                akcje serwerowe (actions/), formatowanie (format/), typy i schematy walidacji,
-                zmienne środowiskowe
+                akcje serwerowe (actions/), funkcje bazodanowe (database/),
+                formatowanie (format/), typy i schematy walidacji, zmienne środowiskowe
+  list/         biblioteka: podgląd (page.tsx) i pełne widoki ([category]/)
   login/        strona logowania
   register/     strona rejestracji
   search/       strona wyszukiwania
@@ -155,4 +169,4 @@ This application uses TMDB and the TMDB APIs but is not endorsed, certified, or 
 
 Aplikacja jest projektem niekomercyjnym i działa zgodnie z [warunkami użycia API TMDB](https://www.themoviedb.org/documentation/api/terms-of-use), w tym z limitem przechowywania danych TMDB (maksymalnie 6 miesięcy) i obowiązkiem atrybucji.
 
-Ikony: [Circum Icons](https://circumicons.com) (przez pakiet `react-icons`), licencja MPL-2.0.
+Ikony (przez pakiet `react-icons`): [Material Design icons](http://google.github.io/material-design-icons/) (Apache 2.0), [Font Awesome 6](https://fontawesome.com/) (CC BY 4.0), [Ionicons 4](https://ionicons.com/) (MIT), [GitHub Octicons](https://octicons.github.com/) (MIT).

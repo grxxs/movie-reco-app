@@ -17,10 +17,10 @@ const sizes = {
     message: "-mt-1",
   },
   small: {
-    form: "gap-1",
+    form: "gap-2",
     star: "text-lg mx-0.5",
     submit: "text-xs",
-    message: "text-xs min-h-4",
+    message: "text-xs empty:hidden",
   },
 };
 
@@ -55,7 +55,10 @@ export default function Rating({
   }
 
   return (
-    <form action={action} className={`flex flex-col items-center ${styles.form}`}>
+    <form
+      action={action}
+      className={`flex flex-col items-center ${styles.form}`}
+    >
       <div className="flex flex-row" onMouseLeave={() => handleMouseLeave()}>
         {[1, 2, 3, 4, 5].map((n) => (
           <button
