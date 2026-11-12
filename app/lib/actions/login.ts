@@ -3,6 +3,7 @@
 import { createClient } from "../supabase/server";
 import { LogInFormSchema, LogInFormState } from "../definitions";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 export async function login(
   state: LogInFormState,
@@ -28,6 +29,7 @@ export async function login(
   });
 
   if (!error) {
+    revalidatePath("/", "layout");
     redirect("/");
   } else if (error.code === "invalid_credentials") {
     return {

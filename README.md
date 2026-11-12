@@ -142,9 +142,10 @@ Plików `.env*` (poza `.env.example`) nie dodajemy do repozytorium.
 
 ```
 app/
-  components/   komponenty współdzielone (nagłówek, stopka, przyciski, formularze,
-                wyniki wyszukiwania, widok szczegółów tytułu, ocena, komunikaty,
-                komponenty biblioteki w list/)
+  components/   komponenty podzielone na obszary: auth/ (logowanie, rejestracja),
+                layout/ (nagłówek, stopka), list/ (biblioteka), search/ (wyniki
+                wyszukiwania), title/ (strona tytułu, ocena, dodawanie do listy),
+                ui/ (przyciski)
   lib/          logika pomocnicza: klient TMDB, klient Prisma, klienci Supabase (supabase/),
                 akcje serwerowe (actions/), funkcje bazodanowe (database/),
                 formatowanie (format/), typy i schematy walidacji, zmienne środowiskowe
